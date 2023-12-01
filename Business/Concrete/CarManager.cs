@@ -17,7 +17,7 @@ namespace Business.Concrete
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
-        }
+        } 
         public void Add(Car car)
         {
             if (car.CarName.Length > 2 && car.DailyPrice > 0)

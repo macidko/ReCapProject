@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Business.Abstracts
-{
+{ 
     public interface IBrandService
     {
         void Add(Brand brand);

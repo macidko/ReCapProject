@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 namespace DataAccess.Abstracts
 {
     public interface IColorDal: IEntityRepository<Color>
-    {
+    { 
     }
 }
