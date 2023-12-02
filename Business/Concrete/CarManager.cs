@@ -1,4 +1,6 @@
 ﻿using Business.Abstracts;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstracts;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -18,16 +20,21 @@ namespace Business.Concrete
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
-        } 
-        public void Add(Car car)
+        }
+
+        public IResults Add(Car car)
         {
-            if (car.CarName.Length > 2 && car.DailyPrice > 0)
+            if (car.CarName.Length < 2)
             {
-                _carDal.Add(car);
-                Console.WriteLine("Ekleme Başarılı");
+                //var x = new ErrorResult("2den fazla karakter gir").Message;
+                Console.WriteLine(new ErrorResult("2den fazla karakter gir").Message);
+                return new ErrorResult("2den fazla karakter gir");
 
             }
-            else { Console.WriteLine("İsim 2 karakterden uzun olmalı ve fiyat 0'dan büyük olmalı."); }
+            _carDal.Add(car);
+            Console.WriteLine(new SuccessResult("Ekleme başarılı").Message);
+            return new SuccessResult("ekleme başarılı");
+
         }
 
         public void Delete(Car car)
@@ -35,9 +42,21 @@ namespace Business.Concrete
             _carDal.Delete(car);
         }
 
-        public List<Car> GetAll()
+        //public IDataResult<List<Car>> GetAll()
+        //{
+        //    if (DateTime.Now.Hour != 18)
+        //    {
+        //        return new DataSuccessResult<List<Car>>(_carDal.GetAll(), Messages.CardListed);
+        //    }
+        //    return new DataErrorResult<List<Car>>(_carDal.GetAll(), Messages.MaintenanceTime);
+        //}     
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            if (DateTime.Now.Hour != 18)
+            {
+                return new DataSuccessResult<List<Car>>(_carDal.GetAll(), Messages.CardListed);
+            }
+            return new DataErrorResult<List<Car>>(_carDal.GetAll(), Messages.MaintenanceTime);
         }
 
         public Car GetById(int id)
@@ -65,10 +84,11 @@ namespace Business.Concrete
             _carDal.Update(car);
         }
 
-        public List<CarDetail> GetCarDetails()
+        public IDataResult<List<CarDetail>> GetCarDetails()
         {
-            return _carDal.GetCarDetails();
+            return new DataSuccessResult<List<CarDetail>>(_carDal.GetCarDetails(), "asdqwgqwg");
         }
+
 
         //ICarDal _carDal;
 
